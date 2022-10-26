@@ -6,7 +6,7 @@ on:
 env:
   applicationfolder: video-streaming
   AWS_REGION: eu-central-1
-  S3BUCKET: DeploymentBucket
+  S3BUCKET: codedeploystack-webappdeploymentbucket-1167vuveau842
 
 
 jobs:
