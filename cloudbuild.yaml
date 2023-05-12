@@ -1,7 +1,8 @@
 # Switched from $commit_SHA to $SHORT_SHA
 
 steps:
-  - name: 'gcr.io/cloud-builders/mvn'
+  - name: "maven:3.9.1-eclipse-temurin-11"
+    entrypoint: "mvn"
     args: [ 'clean', 'package' ]
   - name: "gcr.io/cloud-builders/docker"
     args:

@@ -12,3 +12,9 @@ spring:
     multipart:
       max-file-size: 1000MB
       max-request-size: 1000MB
+  spring:
+    cloud:
+      gcp:
+        config:
+          credentials:
+            location: delta-env-279714-0f6e13cf1df3.json
