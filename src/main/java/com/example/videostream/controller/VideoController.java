@@ -34,7 +34,7 @@ public class VideoController {
     }
 
     @PostMapping(value = "", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public String postVideo(@RequestPart MultipartFile video, @RequestBody VideoPostDto videoInfo) throws IOException {
+    public String postVideo(@RequestPart MultipartFile video, @ModelAttribute VideoPostDto videoInfo) throws IOException {
         videoService.postVideo(video, videoInfo);
         return "Successful posted video " + video.getName();
     }
