@@ -55,8 +55,12 @@ steps:
 #        Built from commit ${COMMIT_SHA} of repository video-streaming-app
 #        Author: $(git log --format='%an <%ae>' -n 1 HEAD)" && \
 #        git push origin candidate
-
-
+  - name: "gcr.io/cloud-builders/gke-deploy"
+    args:
+      - "run"
+      - "--filename=kubernetes.tpl.yaml"
+      - "--location=europe-southwest1-a"
+      - "--cluster=video-streaming-cluster"
 
 # [END cloudbuild-trigger-cd]
 # timeout: 2000s
