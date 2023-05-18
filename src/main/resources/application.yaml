@@ -18,4 +18,4 @@ spring:
       gcp:
         config:
           credentials:
-            location: delta-env-279714-0f6e13cf1df3.json
+            location: video-streaming-paas.json
