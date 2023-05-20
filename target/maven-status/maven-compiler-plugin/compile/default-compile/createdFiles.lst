@@ -1,8 +1,0 @@
-com\example\videostream\service\VideoService.class
-com\example\videostream\model\Video$VideoBuilder.class
-com\example\videostream\model\Video.class
-com\example\videostream\controller\VideoController.class
-com\example\videostream\dto\VideoPostDto$VideoPostDtoBuilder.class
-com\example\videostream\dto\VideoPostDto.class
-com\example\videostream\VideoRepository.class
-com\example\videostream\VideoStreamApplication.class

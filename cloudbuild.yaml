@@ -28,7 +28,8 @@ steps:
       - |
         gcloud source repos clone video-streaming-repo && \
         git checkout -b kubernetes && \
-        git config --global user.email "video-streaming-app-account@video-streaming-paas.iam.gserviceaccount.com"
+        git config --global user.email "przegrabar@gmail.com" && \
+        git config --global user.name "Przemhub"
 
   # This step generates the new manifest
   - name: "gcr.io/cloud-builders/gcloud"
@@ -51,7 +52,7 @@ steps:
         git add . && \
         git commit -m "Deploying image gcr.io/${PROJECT_ID}/video-streaming-app:${SHORT_SHA}
         Built from commit ${COMMIT_SHA} of repository video-streaming-app" && \
-        git push
+        git push --set-upstream origin kubernetes
 #  - name: "gcr.io/cloud-builders/gke-deploy"
 #    args:
 #      - "run"
