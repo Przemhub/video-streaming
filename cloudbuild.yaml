@@ -8,59 +8,19 @@ steps:
     args:
       - "build"
       - "-t"
-      - "gcr.io/$PROJECT_ID/video-streaming-app:$SHORT_SHA"
+      - "gcr.io/$PROJECT_ID/video-streaming-app:1"
       - "."
-  # timeout: 1800s
-  # - name: 'gcr.io/cloud-builders/gsutil'
-  #  args: ['cp', '-r', 'k8s/*', 'gs://$PROJECT_ID-kubernetes-manifests/vowo-dev']
   - name: "gcr.io/cloud-builders/docker"
     args:
       - "push"
-      - "gcr.io/$PROJECT_ID/video-streaming-app:$SHORT_SHA"
-
-  # [START cloudbuild-trigger-cd]
-  # This step clones the hello-cloudbuild-env repository
-  - name: "gcr.io/cloud-builders/gcloud"
-    id: Clone env repository
-    entrypoint: /bin/sh
+      - "gcr.io/$PROJECT_ID/video-streaming-app:1"
+  - name: "gcr.io/cloud-builders/gke-deploy"
     args:
-      - "-c"
-      - |
-        gcloud source repos clone video-streaming-repo && \
-        git checkout -b kubernetes && \
-        git config --global user.email "przegrabar@gmail.com" && \
-        git config --global user.name "Przemhub"
+      - "run"
+      - "--filename=kubernetes.tpl.yaml"
+      - "--location=europe-southwest1-a"
+      - "--cluster=video-streaming-cluster"
 
-  # This step generates the new manifest
-  - name: "gcr.io/cloud-builders/gcloud"
-    id: Generate manifest
-    entrypoint: /bin/sh
-    args:
-      - "-c"
-      - |
-        sed "s/GOOGLE_CLOUD_PROJECT/${PROJECT_ID}/g" kubernetes.tpl.yaml | \
-        sed "s/COMMIT_SHA/${SHORT_SHA}/g" > video-streaming-repo/kubernetes.yaml
 
-  # This step pushes the manifest back to hello-cloudbuild-env
-  - name: "gcr.io/cloud-builders/gcloud"
-    id: Push manifest
-    entrypoint: /bin/sh
-    args:
-      - "-c"
-      - |
-        set -x && \
-        git add . && \
-        git commit -m "Deploying image gcr.io/${PROJECT_ID}/video-streaming-app:${SHORT_SHA}
-        Built from commit ${COMMIT_SHA} of repository video-streaming-app" && \
-        git push --set-upstream origin kubernetes
-#  - name: "gcr.io/cloud-builders/gke-deploy"
-#    args:
-#      - "run"
-#      - "--filename=kubernetes.tpl.yaml"
-#      - "--location=europe-southwest1-a"
-#      - "--cluster=video-streaming-cluster"
-
-# [END cloudbuild-trigger-cd]
-# timeout: 2000s
-images: ["gcr.io/$PROJECT_ID/video-streaming-app:$SHORT_SHA"]
+images: ["gcr.io/$PROJECT_ID/video-streaming-app:1"]
 

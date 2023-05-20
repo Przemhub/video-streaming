@@ -14,13 +14,13 @@ spec:
     metadata:
       labels:
         app: video-streaming-app
-        version: COMMIT_SHA
+        version: "1"
         environment: dev
     spec:
       serviceAccountName: video-streaming-app-account
       containers:
         - name: video-streaming-app
-          image: gcr.io/GOOGLE_CLOUD_PROJECT/video-streaming-app:COMMIT_SHA
+          image: gcr.io/video-streaming-paas/video-streaming-app:1
           ports:
             - containerPort: 80
           env:
@@ -31,7 +31,7 @@ spec:
             - name: MYSQL_PASSWORD
               value: "Yo>fr5),):)p%yqE"
             - name: MYSQL_IP
-              value: "10.253.16.3"
+              value: "10.122.144.3"
           resources:
             limits:
               memory: 1Gi
@@ -44,7 +44,7 @@ spec:
 #              port: 80
 
 ---
-apiVersion: v1
+apiVersion: apps/v1
 kind: Service
 metadata:
   name: video-streaming-app-service
@@ -60,7 +60,7 @@ spec:
     app: video-streaming-app
 
 ---
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: apps/v1
 kind: VirtualService
 metadata:
   name: video-streaming-virtual-service
@@ -83,23 +83,7 @@ spec:
             host: video-streaming-app-service
 
 ---
-apiVersion: networking.istio.io/v1alpha3
-kind: ServiceEntry
-metadata:
-  name: video-streaming-db
-spec:
-  addresses:
-    - 10.253.16.3
-  hosts:
-    - video-streaming-db
-  location: MESH_EXTERNAL
-  ports:
-    - name: TCP-video-streaming-db
-      number: 3306
-      protocol: TCP
-
----
-apiVersion: v1
+apiVersion: apps/v1
 kind: ServiceAccount
 metadata:
   annotations:
