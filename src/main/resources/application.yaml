@@ -3,11 +3,11 @@ spring:
     username: root
     password: dA1k2F8kC45DuoO5C
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://10.1.49.3/video-streaming-db
-  #    url: jdbc:mysql://34.118.47.249/video-streaming-functions-db
+#    url: jdbc:mysql://10.1.49.3/video-streaming-db
+    url: jdbc:mysql://34.118.47.249/video-streaming-db
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
     default:
       properties:
         hibernate:
@@ -17,7 +17,9 @@ spring:
     gcp:
       sql:
         instance-connection-name: video-stream-instance:europe-central2:video-streaming-db
-        database-name: video-streaming-functions-db
-      credentials:
-        location: video-streaming-paas.json
+        database-name: video-streaming-db
+  servlet:
+    multipart:
+      max-file-size: 1000MB
+      max-request-size: 1000MB
 
