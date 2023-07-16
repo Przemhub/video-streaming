@@ -21,9 +21,9 @@ public class VideoController {
 
     private final VideoService videoService;
 
-    @GetMapping(value = "/{videoName}", produces = "video/mp4")
+    @GetMapping(value = "", produces = "video/mp4")
     @ResponseStatus(HttpStatus.OK)
-    public Mono<Resource> getVideo(@PathVariable String videoName) {
+    public Mono<Resource> getVideo(@RequestParam String videoName) {
         return videoService.getVideo(videoName);
     }
 
@@ -34,8 +34,8 @@ public class VideoController {
     }
 
     @PostMapping(value = "", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public String postVideo(@RequestPart MultipartFile video, @ModelAttribute VideoPostDto videoInfo) throws IOException {
-        videoService.postVideo(video, videoInfo);
+    public String postVideo(@RequestPart MultipartFile video, @RequestParam String description) throws IOException, InterruptedException {
+        videoService.postVideo(video, description);
         return "Successful posted video " + video.getName();
     }
 

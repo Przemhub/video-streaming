@@ -1,16 +1,4 @@
-runtime: java
-env: flex
-runtime_config:
-  operating_system: "ubuntu18"
-  runtime_version: "11"
-env_variables:
-  SPRING_PROFILES_ACTIVE: "gcp,mysql"
+runtime: java17
 handlers:
   - url: /.*
-    script: this field is required, but ignored
-manual_scaling:
-  instances: 1
-readiness_check:
-  path: /
-  app_start_timeout_sec: 180
-
+    script: auto
