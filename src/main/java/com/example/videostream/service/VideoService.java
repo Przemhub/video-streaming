@@ -9,6 +9,8 @@ import com.google.cloud.storage.Storage;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,7 +19,6 @@ import reactor.core.publisher.Mono;
 import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 
 @Service
@@ -30,15 +31,16 @@ public class VideoService {
     private final Storage storage;
     private final ResourceLoader resourceLoader;
     private final VideoRepository videoRepository;
+    private static final String PATH_TO_VIDEOS = "classpath:videos/";
 
-
-    public Mono<InputStream> getVideo(String videoName) throws FileNotFoundException {
+    public Mono<Resource> getVideo(String videoName) throws FileNotFoundException {
         Bucket bucket = storage.get(GCLOUD_BUCKET);
-        if(bucket == null){
-            throw new FileNotFoundException("Bucket "+GCLOUD_BUCKET+" has not yet been created, try POSTing a video.");
+        if (bucket == null) {
+            throw new FileNotFoundException("Bucket " + GCLOUD_BUCKET + " has not yet been created, try POSTing a video.");
         }
         Blob blob = bucket.get(videoName + MP4_SUFFIX);
-        return Mono.fromSupplier(() -> new ByteArrayInputStream(blob.getContent()));
+
+        return Mono.fromSupplier(() -> new InputStreamResource(new ByteArrayInputStream(blob.getContent())));
     }
 
     public void postVideo(MultipartFile video, String description) throws IOException, InterruptedException {
@@ -48,14 +50,13 @@ public class VideoService {
             storage.create(BucketInfo.newBuilder(GCLOUD_BUCKET).setLocation("europe-central2").build()).wait();
         }
         String fileName = video.getResource().getFilename();
-        bucket.create(fileName + MP4_SUFFIX, video.getInputStream().readAllBytes());
+        bucket.create(fileName, video.getInputStream().readAllBytes(), "video/mp4");
         videoRepository.save(Video.builder()
                 .videoName(fileName)
                 .description(description)
                 .build());
 
     }
-
 
     public List<Video> getVideoList() {
         return videoRepository.findAll();

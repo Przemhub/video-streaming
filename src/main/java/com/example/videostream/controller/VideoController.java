@@ -3,15 +3,14 @@ package com.example.videostream.controller;
 import com.example.videostream.model.Video;
 import com.example.videostream.service.VideoService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import reactor.core.publisher.Mono;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 
 @RestController
@@ -23,7 +22,7 @@ public class VideoController {
 
     @GetMapping(value = "/", produces = "video/mp4")
     @ResponseStatus(HttpStatus.OK)
-    public Mono<InputStream> getVideo(@RequestParam String videoName) throws FileNotFoundException {
+    public Mono<Resource> getVideo(@RequestParam String videoName) throws IOException {
         return videoService.getVideo(videoName);
     }
 

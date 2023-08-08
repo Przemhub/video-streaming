@@ -7,7 +7,7 @@ spring:
     url: jdbc:mysql://34.118.47.249/video-streaming-db
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     default:
       properties:
         hibernate:
